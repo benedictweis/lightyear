@@ -4,6 +4,7 @@ mod lightyear;
 mod routes;
 mod request;
 mod response;
+mod method;
 
 fn main() {
     let mut app = Lightyear::new();
