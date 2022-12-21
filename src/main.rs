@@ -11,7 +11,7 @@ fn main() {
     let port = 3000;
 
     app.get("/", | req, res | {
-        res.send("Hello World!");
+        res.send(&format!("Hello World! You are {}", req.headers.get("User-Agent").unwrap_or(&"No one".to_string())));
     });
 
     app.listen(port, | | {

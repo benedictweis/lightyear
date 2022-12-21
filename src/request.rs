@@ -4,16 +4,16 @@ use crate::method::Method;
 
 #[derive(Debug)]
 pub struct Request {
-    method: Method,
-    path: String,
+    pub(crate) method: Method,
+    pub(crate) path: String,
     protocol_version: String,
-    headers: HashMap<String, String>,
-    body: String,
+    pub(crate) headers: HashMap<String, String>,
+    _body: String,
 }
 
 impl Request {
     pub(crate) fn new() -> Request{
-        Request { method: Method::GET, path: "".into(), protocol_version: "".into(), headers: HashMap::new(), body: "".into() }
+        Request { method: Method::GET, path: "".into(), protocol_version: "".into(), headers: HashMap::new(), _body: "".into() }
     }
 }
 

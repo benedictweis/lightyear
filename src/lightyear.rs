@@ -1,6 +1,7 @@
-use std::io::{BufRead, BufReader, Read, Write};
-use std::net::{Shutdown, TcpListener};
+use std::io::{BufRead, BufReader, Write};
+use std::net::TcpListener;
 use std::str::FromStr;
+use crate::method::Method;
 use crate::request::Request;
 use crate::response::Response;
 use crate::routes::Routes;
@@ -14,7 +15,7 @@ impl Lightyear {
         Lightyear { routes: Routes::new() }
     }
 
-    pub fn get<F: 'static>(&mut self, path: &str, function: F) where F: Fn(Request, Response) {
+    pub fn get<F: 'static>(&mut self, path: &str, function: F) where F: Fn(Request, &mut Response) {
         self.routes.get.insert(path.into(), Box::new(function));
     }
 
@@ -35,12 +36,23 @@ impl Lightyear {
                 .collect::<Vec<String>>()
                 .join("\n");
 
-            println!("{:?}", Request::from_str(&http_request));
+            let request = Request::from_str(&http_request).unwrap();
+            let mut response = Response::new();
 
-            let response = "HTTP/1.1 200 OK\r\n\r\n";
+            let closure = match request.method {
+                Method::GET => {
+                    self.routes.get.get(&request.path).unwrap_or_else(|| self.routes.errors.get("404").unwrap())
+                }
+                Method::POST => {
+                    self.routes.post.get(&request.path).unwrap_or_else(|| self.routes.errors.get("404").unwrap())
+                }
+                _ => self.routes.errors.get("405").unwrap(),
+            };
+
+            closure(request, &mut response);
 
 
-            stream.write_all(response.as_bytes()).unwrap();
+            stream.write_all(response.compose().as_bytes()).unwrap();
         }
     }
 }

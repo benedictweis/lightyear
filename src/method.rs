@@ -1,6 +1,8 @@
 use std::borrow::Borrow;
+use std::fmt::{Display, Formatter};
 use std::str::FromStr;
 
+#[allow(clippy::upper_case_acronyms)]
 #[derive(Debug)]
 pub enum Method {
     GET,
@@ -29,5 +31,12 @@ impl FromStr for Method {
             "TRACE" => Ok(Method::TRACE),
             _ => Err(()),
         }
+    }
+}
+
+impl Display for Method {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self).unwrap();
+        Ok(())
     }
 }
