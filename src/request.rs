@@ -1,19 +1,25 @@
+use crate::method::Method;
 use std::collections::HashMap;
 use std::str::FromStr;
-use crate::method::Method;
 
 #[derive(Debug)]
 pub struct Request {
-    pub(crate) method: Method,
-    pub(crate) path: String,
+    pub method: Method,
+    pub path: String,
     protocol_version: String,
-    pub(crate) headers: HashMap<String, String>,
+    pub headers: HashMap<String, String>,
     _body: String,
 }
 
 impl Request {
-    pub(crate) fn new() -> Request{
-        Request { method: Method::GET, path: "".into(), protocol_version: "".into(), headers: HashMap::new(), _body: "".into() }
+    pub fn new() -> Request {
+        Request {
+            method: Method::GET,
+            path: "".into(),
+            protocol_version: "".into(),
+            headers: HashMap::new(),
+            _body: "".into(),
+        }
     }
 }
 
@@ -24,7 +30,7 @@ impl FromStr for Request {
         let mut lines: Vec<&str> = input.lines().collect();
         let mut request = Request::new();
 
-        let split: Vec<_> = lines.remove(0).split( ' ').collect();
+        let split: Vec<_> = lines.remove(0).split(' ').collect();
 
         request.method = Method::from_str(split[0]).unwrap();
         request.path = split[1].into();

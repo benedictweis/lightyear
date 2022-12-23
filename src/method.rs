@@ -16,7 +16,6 @@ pub enum Method {
 }
 
 impl FromStr for Method {
-
     type Err = ();
 
     fn from_str(input: &str) -> Result<Method, Self::Err> {
