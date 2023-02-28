@@ -5,6 +5,7 @@ pub enum ResponseCode {
     MovedPermanently = 301,
     Found = 302,
     NotFound = 404,
+    MethodNotAllowed = 405,
 }
 
 impl TryFrom<usize> for ResponseCode {
@@ -17,6 +18,7 @@ impl TryFrom<usize> for ResponseCode {
             x if x == ResponseCode::MovedPermanently as usize => Ok(ResponseCode::MovedPermanently),
             x if x == ResponseCode::Found as usize => Ok(ResponseCode::Found),
             x if x == ResponseCode::NotFound as usize => Ok(ResponseCode::NotFound),
+            x if x == ResponseCode::MethodNotAllowed as usize => Ok(ResponseCode::MethodNotAllowed),
             _ => Err("response code not found".into()),
         }
     }
@@ -30,6 +32,7 @@ impl ResponseCode {
             ResponseCode::MovedPermanently => format!("{} Moved Permanently", self as usize),
             ResponseCode::Found => format!("{} Found", self as usize),
             ResponseCode::NotFound => format!("{} Not Found", self as usize),
+            ResponseCode::MethodNotAllowed => format!("{} Method Not Allowed", self as usize),
         }
     }
 }

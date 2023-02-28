@@ -2,22 +2,28 @@ use crate::method::Method;
 use std::collections::HashMap;
 use std::str::FromStr;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Request {
+    pub raw: String,
     pub method: Method,
     pub path: String,
     protocol_version: String,
     pub headers: HashMap<String, String>,
+    pub raw_params: String,
+    pub params: HashMap<String, String>,
     _body: String,
 }
 
 impl Request {
     pub fn new() -> Request {
         Request {
+            raw: "".into(),
             method: Method::GET,
             path: "".into(),
             protocol_version: "".into(),
             headers: HashMap::new(),
+            raw_params: "".into(),
+            params: HashMap::new(),
             _body: "".into(),
         }
     }
@@ -42,4 +48,8 @@ impl FromStr for Request {
         }
         Ok(request)
     }
+}
+
+fn parse_params(raw_params: String) -> Option<HashMap<String, String>> {
+    None
 }
